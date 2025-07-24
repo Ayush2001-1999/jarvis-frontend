@@ -16,7 +16,6 @@
       margin: 0;
       padding: 0;
     }
-
     .logo {
       width: 80px;
       margin: 30px auto 10px;
@@ -25,7 +24,6 @@
       border-radius: 16px;
       border: 2px solid white;
     }
-
     .glass-card {
       background: rgba(255, 255, 255, 0.05);
       border-radius: 16px;
@@ -39,11 +37,7 @@
       text-align: center;
       position: relative;
     }
-
-    .glass-card input[type="text"],
-    .glass-card input[type="email"],
-    .glass-card input[type="password"],
-    .glass-card input[type="tel"] {
+    .glass-card input {
       width: 100%;
       padding: 10px;
       margin: 12px 0;
@@ -54,16 +48,13 @@
       font-size: 1rem;
       font-weight: 600;
     }
-
     ::placeholder {
       color: black;
       font-weight: 600;
     }
-
     .password-container {
       position: relative;
     }
-
     .toggle-password {
       position: absolute;
       right: 15px;
@@ -72,7 +63,6 @@
       color: #ccc;
       cursor: pointer;
     }
-
     .glass-card button {
       width: 100%;
       padding: 12px;
@@ -86,7 +76,6 @@
       cursor: pointer;
       animation: waveMove 4s ease infinite;
     }
-
     .glass-card a {
       display: block;
       margin-top: 10px;
@@ -94,42 +83,11 @@
       font-size: 0.9rem;
       text-decoration: none;
     }
-
     @keyframes waveMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    .checkbox-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 0.9rem;
-      margin: 10px 0;
-    }
-
-    .checkbox-container label {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
-    }
-
-    input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      accent-color: #00ffff;
-      box-shadow: 0 0 6px rgba(0, 255, 255, 0.8);
-      transition: box-shadow 0.3s ease;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    input[type="checkbox"]:hover {
-      box-shadow: 0 0 10px rgba(0, 255, 255, 1);
-    }
-
     #loading {
       display: none;
       position: absolute;
@@ -145,69 +103,34 @@
       justify-content: center;
       border-radius: 16px;
     }
-
-    .login-banner {
-      text-align: center;
-      background: rgba(0, 255, 255, 0.2);
-      padding: 8px 14px;
-      margin: 0 auto;
-      max-width: 600px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-      font-size: 0.9rem;
-      font-weight: bold;
-      position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 999;
-      backdrop-filter: blur(6px);
-    }
-
-    #signupGreeting {
-      margin: 0;
-      animation: fadeIn 2s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
   </style>
 </head>
 <body class="glass-theme">
-  <div class="login-banner" style="top: 10px; padding: 4px 10px; font-size: 0.75rem; max-width: 90%;">
+  <div class="login-banner" style="top: 10px; padding: 4px 10px; font-size: 0.75rem; max-width: 90%; text-align: center;">
     <p id="signupGreeting">Welcome to Jarvis Signup</p>
   </div>
-
   <a href="index.html" style="margin-top: 60px; display: block;">
     <img src="logo.jpg" alt="Logo" class="logo">
   </a>
-
   <div class="glass-card">
     <div id="loading">Creating account, please wait...</div>
     <h2>Create Your Jarvis Account</h2>
-    <input type="text" placeholder="Username" required />
-    <input type="email" placeholder="Email" required />
-    <input type="tel" placeholder="Mobile Number" required />
-
-    <div class="password-container">
-      <input type="password" placeholder="Password" required id="signup-password" />
-      <i class="fas fa-eye toggle-password" onclick="toggleVisibility('signup-password', this)"></i>
-    </div>
-
-    <div class="password-container">
-      <input type="password" placeholder="Confirm Password" required id="signup-confirm-password" />
-      <i class="fas fa-eye toggle-password" onclick="toggleVisibility('signup-confirm-password', this)"></i>
-    </div>
-
-    <div class="checkbox-container">
-      <label>Remember Me <input type="checkbox" /></label>
-    </div>
-    <button onclick="handleSignupClick()">Sign Up</button>
-    <a href="login.html">Already have an account? Login</a>
+    <form id="signupForm" method="POST" action="https://jarvis-virtual-assistant1.onrender.com/signup">
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="tel" name="mobile" placeholder="Mobile Number" required />
+      <div class="password-container">
+        <input type="password" name="password" placeholder="Password" required id="signup-password" />
+        <i class="fas fa-eye toggle-password" onclick="toggleVisibility('signup-password', this)"></i>
+      </div>
+      <div class="password-container">
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" required id="signup-confirm-password" />
+        <i class="fas fa-eye toggle-password" onclick="toggleVisibility('signup-confirm-password', this)"></i>
+      </div>
+      <button type="submit">Sign Up</button>
+      <a href="login.html">Already have an account? Login</a>
+    </form>
   </div>
-
   <script>
     function toggleVisibility(id, icon) {
       const input = document.getElementById(id);
@@ -221,92 +144,53 @@
         icon.classList.add('fa-eye');
       }
     }
-
     window.addEventListener('DOMContentLoaded', () => {
-  const fromIndex = document.referrer.endsWith('/') || document.referrer.includes('index.html');
-
-  if (fromIndex) {
-    sessionStorage.removeItem('hasSpoken');
-  }
-
-  const alreadySpoken = sessionStorage.getItem('hasSpoken');
-
-  if (!alreadySpoken) {
-    const now = new Date();
-    const hours = now.getHours();
-    let greeting;
-
-    if (hours < 12) {
-      greeting = 'Good morning';
-    } else if (hours < 18) {
-      greeting = 'Good afternoon';
-    } else if (hours < 21) {
-      greeting = 'Good evening';
-    } else {
-      greeting = 'Good night';
-    }
-
-    const message = `${greeting}! You are at the sign up page. Create your account to join the future of virtual assistance.`;
-    document.getElementById('signupGreeting').textContent = message;
-
-    const utterance = new SpeechSynthesisUtterance(message);
-    utterance.onend = () => sessionStorage.setItem('hasSpoken', 'true');
-    speechSynthesis.speak(utterance);
-  }
-});
-
-    let signupInitiatedByUser = false;
-
-    function greetUser() {
-      if (!signupInitiatedByUser) return;
-      const username = document.querySelector('input[placeholder="Username"]').value.trim();
-      const email = document.querySelector('input[placeholder="Email"]').value.trim();
-      const mobile = document.querySelector('input[placeholder="Mobile Number"]').value.trim();
-      const password = document.getElementById('signup-password').value.trim();
-      const confirmPassword = document.getElementById('signup-confirm-password').value.trim();
-
-      if (!username || !email || !mobile || !password || !confirmPassword) {
-        alert('Please fill in all fields.');
-        return;
-      }
-
-      if (password !== confirmPassword) {
-        alert('Passwords do not match.');
-        return;
-      }
-
-      const loading = document.getElementById("loading");
-      loading.style.display = "flex";
-
+      if (sessionStorage.getItem('hasSpoken')) return;
       const now = new Date();
       const hours = now.getHours();
-      let greeting;
-
-      if (hours < 12) {
-        greeting = 'Good morning';
-      } else if (hours < 18) {
-        greeting = 'Good afternoon';
-      } else if (hours < 21) {
-        greeting = 'Good evening';
-      } else {
-        greeting = 'Good night';
-      }
-
-      const message = `${greeting}, ${username}! Your account has been created.`;
-      loading.textContent = message;
-      const synth = window.speechSynthesis;
+      let greeting = (hours < 12) ? 'Good morning' : (hours < 18) ? 'Good afternoon' : (hours < 21) ? 'Good evening' : 'Good night';
+      const message = `${greeting}! You are at the sign up page. Create your account to join the future of virtual assistance.`;
+      document.getElementById('signupGreeting').textContent = message;
       const utterance = new SpeechSynthesisUtterance(message);
-      synth.speak(utterance);
-
-      setTimeout(() => {
-        window.location.href = 'login.html';
-      }, 3000);
-    }
-
-    function handleSignupClick() {
-      signupInitiatedByUser = true;
-      greetUser();
-    }
+      utterance.onend = () => sessionStorage.setItem('hasSpoken', 'true');
+      speechSynthesis.speak(utterance);
+    });
+    document.getElementById('signupForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const username = this.username.value.trim();
+      const email = this.email.value.trim();
+      const mobile = this.mobile.value.trim();
+      const password = this.password.value.trim();
+      const confirmPassword = this.confirmPassword.value.trim();
+      if (!username || !email || !mobile || !password || !confirmPassword) return alert('Please fill in all fields.');
+      if (password !== confirmPassword) return alert('Passwords do not match.');
+      const loading = document.getElementById("loading");
+      loading.style.display = "flex";
+      try {
+        const res = await fetch('https://jarvis-virtual-assistant1.onrender.com/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, mobile, password })
+        });
+        if (res.ok) {
+          const now = new Date();
+          const hours = now.getHours();
+          let greeting = (hours < 12) ? 'Good morning' : (hours < 18) ? 'Good afternoon' : (hours < 21) ? 'Good evening' : 'Good night';
+          const message = `${greeting}, ${username}! Your account has been created.`;
+          loading.textContent = message;
+          speechSynthesis.speak(new SpeechSynthesisUtterance(message));
+          setTimeout(() => { window.location.href = 'login.html'; }, 3000);
+        } else {
+          const error = await res.text();
+          alert(`Signup failed: ${error}`);
+          loading.style.display = "none";
+        }
+      } catch (err) {
+        console.error('Signup error:', err);
+        alert('An error occurred during signup.');
+        loading.style.display = "none";
+      }
+    });
   </script>
 </body>
 </html>

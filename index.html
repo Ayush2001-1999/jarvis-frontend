@@ -1,242 +1,244 @@
+<!-- ✅ Fully restored index.html with Siri-like and previous custom features -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jarvis Virtual Assistant</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jarvis Assistant</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: url('authBg.png') no-repeat center center/cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      backdrop-filter: blur(2px);
+    }
+    #guide-bubble {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 340px;
+      font-size: 14px;
+      border: 1px solid #00f0ff;
+      box-shadow: 0 0 10px #00f0ff;
+      cursor: pointer;
+    }
+    #guide-bubble h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #00f0ff;
+    }
+  </style>
 </head>
-
-<body class="glass-theme">
-  <a href="index.html">
-    <img src="logo.jpg" alt="Logo" class="logo">
-  </a>
-
-  <div class="container dashboard-grid">
-    <h1 class="glow">Welcome to Jarvis</h1>
-    <p class="dashboard-subtitle">Smart. Fast. Always listening — meet your virtual sidekick.</p>
-
-    <div class="auth-buttons">
-      <a href="login.html"><button class="btn login-btn">Log In</button></a>
-      <a href="signup.html"><button class="btn signup-btn">Sign Up</button></a>
-    </div>
-
-    <div class="mic-container">
-      <input type="text" id="speech-textbox" placeholder="Speak now..." readonly />
-      <i class="fas fa-microphone mic-icon"></i>
-    </div>
-
-    <div class="siri-wave" id="siriWave"></div>
-    <div id="weatherDisplay" class="weather-display" style="display: none;"></div>
-  </div>
-
-  <div class="chat-bubble" id="chatBubble">
-    <i class="fas fa-question-circle"></i> Guide
-  </div>
-
-  <div class="guide-panel" id="guidePanel">
+<body>
+  <h1>Welcome to Jarvis</h1>
+  <div id="weatherDisplay" style="display:none;margin-top:20px;"></div>
+  <div id="guide-bubble">
+    <h3>Guide</h3>
     <ul>
-      <li>⚙️ <strong>Customize</strong> your experience from the moment you log in.</li>
-      <li>💡 Ask Jarvis anything — from tasks to quick answers.</li>
-      <li>🧠 The more you use it, the smarter it gets.</li>
-      <li>📊 Track your progress and get real-time insights.</li>
-      <li>🎧 Voice control lets you operate hands-free anytime.</li>
-      <li>⚠️ Tap the mic and say “help” for instant guidance.</li>
+      <li>"Weather in [city name]"</li>
+      <li>"Weather near me" or "Weather here"</li>
+      <li>"Forecast for [location]"</li>
+      <li>"Open Google", "Open YouTube", "Open Instagram" etc.</li>
+      <li>"Search for [your query]"</li>
+      <li>"Play music" to open YouTube Music</li>
+      <li>"Tell me a joke"</li>
+      <li>"What's the weather in my location"</li>
+      <li>"Open Facebook", "Open Twitter", "Open Github"</li>
+      <li>"Search Elon Musk", "Search latest news"</li>
+      <li>"What's the time?", "Set a timer", "Roll a dice", "Flip a coin"</li>
     </ul>
   </div>
 
   <script>
-    function speak(text) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
-      speechSynthesis.speak(utterance);
-    }
-
-    const micIcon = document.querySelector(".mic-icon");
-    const textbox = document.getElementById("speech-textbox");
-    const siriWave = document.getElementById("siriWave");
-
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.continuous = false;
-    recognition.lang = "en-US";
-    recognition.interimResults = false;
-
-    micIcon.addEventListener("click", () => {
-      recognition.start();
-      siriWave.classList.add("active");
-    });
-
-    recognition.onresult = function (event) {
-      siriWave.classList.add("listening");
-      let transcript = event.results[0][0].transcript.toLowerCase();
-      transcript = transcript.replace(/(tell me|what is|give me|please|jarvis)/gi, "").trim();
-      textbox.value = transcript.toUpperCase();
-      console.log("Command received:", transcript);
-
-      if (transcript.includes("hello jarvis")) {
-        speak("Hello! How can I help you today?");
-      } else if (transcript.includes("play music")) {
-        speak("Opening YouTube Music.");
-        window.open("https://music.youtube.com", "_blank");
-      } else if (transcript.includes("open whatsapp")) {
-        speak("Opening WhatsApp Web.");
-        window.open("https://web.whatsapp.com", "_blank");
-      } else if (transcript.includes("open facebook")) {
-        speak("Opening Facebook.");
-        window.open("https://www.facebook.com", "_blank");
-      } else if (transcript.includes("open instagram")) {
-        speak("Opening Instagram.");
-        window.open("https://www.instagram.com", "_blank");
-      } else if (transcript.includes("open twitter")) {
-        speak("Opening Twitter.");
-        window.open("https://www.twitter.com", "_blank");
-      } else if (transcript.includes("open linkedin")) {
-        speak("Opening LinkedIn.");
-        window.open("https://www.linkedin.com", "_blank");
-      } else if (transcript.includes("open google")) {
-        speak("Opening Google.");
-        window.open("https://www.google.com", "_blank");
-      } else if (transcript.startsWith("search")) {
-        const query = transcript.replace("search", "").trim();
-        if (query) {
-          speak(`Searching Google for ${query}`);
-          window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-        } else {
-          speak("Please say what you want to search after 'search'.");
-        }
-      } else if (transcript.includes("date")) {
-        const today = new Date();
-        const dateString = today.toLocaleDateString();
-        speak(`Today's date is ${dateString}`);
-      } else if (transcript.includes("time")) {
-        const now = new Date();
-        const timeString = now.toLocaleTimeString();
-        speak(`The time is ${timeString}`);
-      } else if (transcript.startsWith("set reminder") || transcript.startsWith("remind me to")) {
-        const task = transcript.replace("set reminder", "").replace("remind me to", "").trim();
-        if (task) {
-          localStorage.setItem(`reminder-${Date.now()}`, task);
-          speak(`Reminder set for: ${task}`);
-        } else {
-          speak("Please specify what to remind you about.");
-        }
-      } else if (transcript.startsWith("add task")) {
-        const task = transcript.replace("add task", "").trim();
-        if (task) {
-          localStorage.setItem(`task-${Date.now()}`, task);
-          speak(`Task added: ${task}`);
-        } else {
-          speak("Please say what task to add.");
-        }
-      } else if (transcript.includes("hourly forecast") || transcript.includes("early forecast")) {
-        const location = transcript
-          .replace("hourly forecast", "")
-          .replace("early forecast", "")
-          .replace(/\bof\b|\bin\b|\bat\b|\bfor\b/gi, "")
-          .trim();
-        if (location) {
-          fetchWeather(location);
-        } else {
-          speak("Please say the city after 'hourly forecast'.");
-        }
-      } else if (transcript.includes("weather")) {
-        const location = transcript
-          .replace(/.*weather\s+(in|at|for|of)?\s*/i, "")
-          .replace(/\bof\b|\bin\b|\bat\b|\bfor\b/gi, "")
-          .trim();
-        if (location) {
-          fetchWeather(location);
-        } else {
-          speak("Please say the weather followed by a valid city or country name.");
-        }
-      } else {
-        speak("Sorry, I didn't understand that command.");
-      }
-    };
-
-    recognition.onend = function () {
-      siriWave.classList.remove("active");
-    };
-
-    recognition.onerror = function (event) {
-      console.error("Speech recognition error", event);
-      siriWave.classList.remove("listening");
-    };
-
-    function fetchWeather(location) {
+    async function fetchWeather(location) {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      const signal = controller.signal;
+      try {
+        const response = await fetch(`https://jarvis-virtual-assistant1.onrender.com/weather?location=${encodeURIComponent(location)}`, { signal });
+        if (!response.ok) throw new Error("Network response not OK");
+        const data = await response.json();
 
-      fetch(`http://localhost:3000/weather?location=${encodeURIComponent(location)}`, { signal: controller.signal })
-        .then(res => res.json())
-        .then(data => {
-          const weatherDisplay = document.getElementById("weatherDisplay");
-          if (data.hourlyForecast) {
-            const city = data.city;
-            const weatherMessage = `Hourly forecast for ${city}`;
-            let forecastHTML = `<p style=\"margin-bottom:10px;\"><strong>${weatherMessage}</strong></p><div class=\"hourly-cards" style=\"display:flex;gap:15px;overflow-x:auto;padding:10px 0;\">`;
+        const container = document.getElementById("weatherDisplay");
+        if (!container) return;
 
-            data.hourlyForecast.forEach(entry => {
-              const iconUrl = `https://openweathermap.org/img/wn/${entry.icon}@2x.png?v=${Date.now()}`;
-              forecastHTML += `
-                  <div class=\"hour-card\">
-                    <img src=\"${iconUrl}\" alt=\"icon\" height=\"40\" />
-                  <p><strong>${entry.time.split(" ")[1]}</strong></p>
-                  <p>${entry.temp}°C</p>
-                  <p>${entry.description}</p>
-                </div>
-              `;
-            });
-            forecastHTML += `</div>`;
-            speak(weatherMessage);
-            data.hourlyForecast.forEach(entry => {
-              const time = new Date(entry.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-              speak(`At ${time}, it will be ${entry.temp} degrees Celsius with ${entry.description}.`);
-            });
-            weatherDisplay.innerHTML = forecastHTML;
-            weatherDisplay.style.display = "block";
-          } else if (data.weather) {
-            const weather = data.weather;
-            const city = data.city;
-            const iconCode = weather.icon || "01d";
-            const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png?v=${Date.now()}`;
-            const weatherMessage = `The weather in ${city} is ${weather.text} with a temperature of ${weather.temp} degrees Celsius.`;
-            speak(weatherMessage);
-            weatherDisplay.innerHTML = `<img src=\"${iconUrl}\" alt=\"icon\" style=\"height:40px;vertical-align:middle;margin-right:10px;\"> ${weatherMessage}`;
-            weatherDisplay.style.display = "block";
-          } else {
-            throw new Error("Weather not found");
+        if (data.hourlyForecast) {
+          const city = data.city;
+          let html = `<p><strong>Hourly forecast for ${city}</strong></p><div style="display:flex;gap:15px;overflow-x:auto;">`;
+          for (const hour of data.hourlyForecast) {
+            const iconUrl = `https://openweathermap.org/img/wn/${hour.icon}@2x.png`;
+            html += `<div style="padding:10px;border:1px solid #ccc;border-radius:8px;min-width:100px;text-align:center;background:rgba(0,0,0,0.6);">
+                        <img src="${iconUrl}" height="40"><br>
+                        <strong>${hour.time.split(" ")[1]}</strong><br>
+                        ${hour.temp}&deg;C<br>
+                        ${hour.description}
+                      </div>`;
           }
-        })
-        .catch(err => {
-          console.error("Proxy error:", err);
-          speak(`Sorry, I couldn't get accurate weather for ${location}.`);
-        });
+          html += `</div>`;
+          container.innerHTML = html;
+          container.style.display = "block";
+          speak(`Hourly forecast for ${city}`);
+        } else {
+          container.innerHTML = `<p>No weather data found.</p>`;
+          container.style.display = "block";
+          speak(`Sorry, no weather found for ${location}`);
+        }
+      } catch (err) {
+        speak(`Sorry, I couldn't get weather for ${location}`);
+      }
     }
 
-    const chatBubble = document.getElementById("chatBubble");
-    const guidePanel = document.getElementById("guidePanel");
+    function speak(message) {
+      const speech = new SpeechSynthesisUtterance(message);
+      speechSynthesis.speak(speech);
+    }
 
-    chatBubble.addEventListener("click", () => {
-      guidePanel.classList.toggle("visible");
+    function processCommand(command) {
+  const systemApps = {
+    whatsapp: 'whatsapp',
+    vscode: 'vscode',
+    notepad: 'notepad',
+    calculator: 'calculator'
+  };
+      const lower = command.toLowerCase();
 
-      if (guidePanel.classList.contains("visible")) {
-        const tips = [
-          "Customize your experience from the moment you log in.",
-          "Ask Jarvis anything — from tasks to quick answers.",
-          "The more you use it, the smarter it gets.",
-          "Track your progress and get real-time insights.",
-          "Voice control lets you operate hands-free anytime.",
-          "Tap the mic and say 'help' for instant guidance."
-        ];
-
-        tips.forEach((tip, i) => {
-          setTimeout(() => speak(tip), i * 2500);
-        });
+      if (lower.includes("what's the time") || lower.includes("tell me the time")) {
+        const now = new Date();
+        const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        speak(`The time is ${time}`);
+        return;
       }
+
+      if (lower.includes("set a timer for")) {
+        const match = lower.match(/set a timer for (\d+) (second|seconds|minute|minutes)/);
+        if (match) {
+          const value = parseInt(match[1]);
+          const unit = match[2];
+          const ms = unit.startsWith("minute") ? value * 60000 : value * 1000;
+          speak(`Timer set for ${value} ${unit}`);
+          setTimeout(() => speak(`Your ${value} ${unit} timer is up!`), ms);
+        } else {
+          speak("Please specify a time like: set a timer for 2 minutes");
+        }
+        return;
+      }
+
+      if (lower.includes("what's today's date") || lower.includes("tell me the date")) {
+        const today = new Date().toLocaleDateString();
+        speak(`Today's date is ${today}`);
+        return;
+      }
+
+      if (lower.includes("roll a dice") || lower.includes("roll a die")) {
+        const roll = Math.floor(Math.random() * 6) + 1;
+        speak(`You rolled a ${roll}`);
+        return;
+      }
+
+      if (lower.includes("flip a coin")) {
+        const result = Math.random() < 0.5 ? "heads" : "tails";
+        speak(`It's ${result}`);
+        return;
+      }
+
+      if (lower.includes("play music")) {
+        speak("Playing music on YouTube Music");
+        window.open("https://music.youtube.com", "_blank");
+        return;
+      }
+
+      if (lower.includes("tell me a joke") || lower.includes("joke")) {
+        const jokes = [
+          "Why don’t scientists trust atoms? Because they make up everything!",
+          "Why did the computer go to therapy? It had too many bytes of trauma.",
+          "I told my AI assistant a joke... it logged it as an error.",
+          "Why was the JavaScript developer sad? Because he didn’t know how to ‘null’ his feelings."
+        ];
+        const joke = jokes[Math.floor(Math.random() * jokes.length)];
+        speak(joke);
+        return;
+      }
+
+      const weatherMatch = lower.match(/weather in (.+)|forecast for (.+)/);
+      if (weatherMatch) {
+        const location = weatherMatch[1] || weatherMatch[2];
+        speak(`Getting weather for ${location}`);
+        fetchWeather(location);
+        return;
+      }
+
+      if (lower.includes("weather here") || lower.includes("weather near me") || lower.includes("my location weather")) {
+        speak("Getting your location...");
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+          const data = await res.json();
+          const city = data.address.city || data.address.town || data.address.village || data.address.state;
+          if (city) fetchWeather(city);
+          else speak("Could not determine your location.");
+        });
+        return;
+      }
+
+      if (lower.startsWith("open ")) {
+  const app = lower.replace("open ", "").trim();
+  const siteMap = {
+    youtube: "https://youtube.com",
+    instagram: "https://instagram.com",
+    google: "https://google.com",
+    twitter: "https://twitter.com",
+    facebook: "https://facebook.com",
+    github: "https://github.com"
+  };
+  if (siteMap[app]) {
+    window.open(siteMap[app], "_blank");
+    speak(`Opening ${app}`);
+  } else if (systemApps[app]) {
+    fetch(`http://localhost:3000/open-app?app=${systemApps[app]}`);
+    speak(`Opening ${app} on your system`);
+  } else {
+    window.open(`https://${app}.com`, "_blank");
+    speak(`Opening ${app}`);
+  }
+  return;
+}
+
+      if (lower.startsWith("search for ") || lower.startsWith("search ")) {
+        const query = lower.replace("search for", "").replace("search", "").trim();
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, "_blank");
+        speak(`Searching Google for ${query}`);
+        return;
+      }
+
+      speak("Sorry, I didn’t understand that command.");
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      speak("Welcome! You can ask for weather, open websites, play music, or hear a joke.");
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.continuous = true;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+      recognition.onresult = (event) => {
+        const transcript = event.results[event.results.length - 1][0].transcript.trim();
+        processCommand(transcript);
+      };
+      recognition.onerror = (e) => console.error(e);
+      recognition.start();
+
+      document.getElementById("guide-bubble").addEventListener("click", () => {
+        const message = `Here are the things you can ask me to do: Weather in any city. Weather near me. Forecast for a location. Open websites like Google, YouTube, Instagram, Twitter, GitHub, Facebook. Search anything on Google. Play music. Ask me to tell a joke. Ask for time, date, flip a coin, or roll a dice.`;
+        speak(message);
+      });
     });
   </script>
 </body>
